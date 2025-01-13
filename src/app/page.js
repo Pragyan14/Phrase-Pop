@@ -1,6 +1,6 @@
-import UploadIcon from "@/components/UploadIcons";
 import DemoSection from "@/components/DemoSection";
 import HeaderSection from "@/components/HeaderSection";
+import UploadForm from "@/components/UploadForm";
 
 export default function Home() {
   return (
@@ -12,11 +12,9 @@ export default function Home() {
       />
 
       <div className="text-center">
-        <label className="bg-green-400 py-2 px-6 rounded-full inline-flex gap-2 cursor-pointer">
-          <UploadIcon/>
-          <span>Choose file</span>
-          <input type="file" className="hidden"/>
-        </label>
+
+        <UploadForm/>
+
       </div>
 
       <DemoSection/>
