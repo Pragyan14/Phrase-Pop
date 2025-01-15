@@ -73,9 +73,9 @@ async function getTranscriptionFile(filename){
     }catch (e){}
 
     if(transcriptionJobResponse){
-        const transcription = await streamToString(transcriptionJobResponse.Body);
-        console.log({transcription});
+        return JSON.parse(await streamToString(transcriptionJobResponse.Body));
     }
+    return null;
 }
 
 export async function GET(req){
@@ -84,7 +84,13 @@ export async function GET(req){
     const filename = searchParams.get('filename');
 
     // find ready transcription
-    await getTranscriptionFile(filename);
+    const transcription = await getTranscriptionFile(filename);
+    if(transcription){
+        return Response.json({
+            status: "COMPLETED",
+            transcription
+        });
+    }
 
     // check if already transcribing
     const existingJob = await getJob(filename);
