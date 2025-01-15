@@ -46,9 +46,9 @@ async function getJob(filename){
 async function streamToString(stream){
     const chunks = [];
     return new Promise((resolve,reject)=>{
-        stream.on('data',chunk => chunks.push(Buffer.from(chunk)));
-        stream.on('end', resolve(Buffer.concat(chunks).toString('utf8')));
-        stream.on('error',reject);
+        stream.on('data',(chunk) => {chunks.push(chunk)});
+        stream.on('end', () => {resolve(Buffer.concat(chunks).toString('utf8'));});
+        stream.on('error',(err) => {reject(err);});
     });
 }
 
