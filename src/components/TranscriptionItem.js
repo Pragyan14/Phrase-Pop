@@ -1,25 +1,23 @@
-import {useState} from "react";
-
-export default function TranscriptionItem({item}){
-    const [startTime,setStartTime] = useState(item.start_time);
-    const [endTime,setEndTime] = useState(item.end_time);
-    const [content,setContent] = useState(item.content);
+export default function TranscriptionItem({item,handleStartTimeChange,handleEndTimeChange,handleContentChange}){
+    if(!item){
+        return '';
+    }
     return (
         <div className={"my-1 grid grid-cols-3 gap-1 items-center"}>
             <input
-                value={startTime}
+                value={item.start_time}
                 className={"bg-white/20 rounded-md p-1"}
-                onChange={e => setStartTime(e.target.value)}
+                onChange={handleStartTimeChange}
             />
             <input
-                value={endTime}
+                value={item.end_time}
                 className={"bg-white/20 rounded-md p-1"}
-                onChange={e => setEndTime(e.target.value)}
+                onChange={handleEndTimeChange}
             />
             <input
-                value={content}
+                value={item.content}
                 className={"bg-white/20 rounded-md p-1"}
-                onChange={e => setContent(e.target.value)}
+                onChange={handleContentChange}
             />
         </div>
     )

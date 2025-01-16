@@ -1,13 +1,12 @@
 'use client';
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import axios from "axios";
 import {clearTranscriptionItems} from "@/lib/awsTranscriptionHelper";
-import TranscriptionItem from "@/components/TranscriptionItem";
-import SparklesIcon from "@/components/SparklesIcon";
 import ResultVideo from "@/components/ResultVideo";
+import TranscriptionEditor from "@/components/TranscriptionEditor";
 
 export default function FilePage({params}){
-    const filename = params.filename;
+    const {filename} = React.use(params);
     const [isTranscribing, setIsTranscribing] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
     const [awsTranscriptionItems,setAwsTranscriptionItems] = useState([]);
@@ -55,18 +54,19 @@ export default function FilePage({params}){
             <div className={"grid grid-cols-2 gap-16"}>
                 <div className={"max-w-xs"}>
                     <h2 className={"text-2xl text-white/60 mb-4 text-center"}>Transcription</h2>
-                    <div className={"grid grid-cols-3 sticky top-0 bg-violet-800/80 rounded-md p-2"}>
-                        <div>Start</div>
-                        <div>End</div>
-                        <div>Content</div>
-                    </div>
-                    {awsTranscriptionItems.length > 0 && awsTranscriptionItems.map(item => (
-                        <TranscriptionItem item = {item}/>
-                    ))}
+
+                    <TranscriptionEditor
+                        awsTranscriptionItems={awsTranscriptionItems}
+                        setAwsTranscriptionItems={setAwsTranscriptionItems}
+                    />
+
                 </div>
                 <div>
+
                     <h2 className={"text-2xl text-white/60 mb-4 text-center"}>Result</h2>
+
                     <ResultVideo filename={filename}/>
+
                 </div>
             </div>
         </div>

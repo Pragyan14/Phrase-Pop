@@ -1,12 +1,18 @@
 import SparklesIcon from "@/components/SparklesIcon";
+import {useEffect, useState} from "react";
 
 export default function ResultVideo({filename}){
+    const [videoSrc,setVideoSrc] = useState('0');
+    useEffect(()=>{
+        setVideoSrc(`https://phrase-pop.s3.amazonaws.com/${filename}`);
+    },[])
     return(
         <>
             <div className={"mb-4"}>
 
                 <video
                     controls
+                    // data-video={videoSrc}
                     src={`https://phrase-pop.s3.amazonaws.com/${filename}`}
                 />
             </div>
