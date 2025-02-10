@@ -8,6 +8,7 @@ export default function TranscriptionEditor({awsTranscriptionItems, setAwsTransc
         setAwsTranscriptionItems(newAwsItems);
     }
 
+    // console.log(awsTranscriptionItems)
     return(
         <>
             <div className={"grid grid-cols-3 sticky top-0 bg-violet-800/80 rounded-md p-2"}>
@@ -16,6 +17,7 @@ export default function TranscriptionEditor({awsTranscriptionItems, setAwsTransc
                 <div>Content</div>
             </div>
 
+            {/*{console.log(awsTranscriptionItems)}*/}
             {awsTranscriptionItems.length > 0 && (
                 <div>
                     { awsTranscriptionItems.map((item,key) => (
