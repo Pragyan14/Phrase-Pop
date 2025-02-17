@@ -2,6 +2,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import SparklesIcon from "@/components/SparklesIcon";
 import Link from "next/link";
+import '@mantine/core/styles.css';
+import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,9 +23,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
+    <head>
+      <ColorSchemeScript />
+    </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#5AB2FF] text-white`}
       >
+      <MantineProvider>
+
         <main className="p-4 max-w-2xl mx-auto">
 
           <header className="flex justify-between my-8">
@@ -41,6 +48,8 @@ export default function RootLayout({ children }) {
           {children}
 
         </main>
+
+      </MantineProvider>
       </body>
     </html>
   );
