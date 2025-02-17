@@ -7,10 +7,11 @@ import {transcriptionItemToSrt} from "@/lib/awsTranscriptionHelper";
 import roboto from "./../fonts/Roboto-Regular.ttf"
 import robotoBold from "./../fonts/Roboto-Bold.ttf"
 
-// processVideo();
 
 export default function ResultVideo({filename,transciptionItems}){
     const videoUrl = `https://phrase-pop.s3.amazonaws.com/${filename}`;
+    const [primaryColor,setPrimaryColor] = useState("#FFFFFF");
+    const [outlineColor,setOutlineColor] = useState("#000000");
     const [videoSrc,setVideoSrc] = useState('0');
     const [loaded, setLoaded] = useState(false);
     const ffmpegRef = useRef(new FFmpeg());
@@ -34,6 +35,12 @@ export default function ResultVideo({filename,transciptionItems}){
         setLoaded(true);
     }
 
+    function toFfmpegColor(rgb){
+        const bgr = `&H${rgb.slice(5,7)}${rgb.slice(3,5)}${rgb.slice(1,3)}&`;
+        console.log(rgb, bgr)
+        return bgr;
+    }
+
     const transcode = async () => {
         const ffmpeg = ffmpegRef.current;
         const srt = transcriptionItemToSrt(transciptionItems)
@@ -47,7 +54,7 @@ export default function ResultVideo({filename,transciptionItems}){
             '-i', filename,
             '-preset','ultrafast',
             '-to', '00:00:05',
-            '-vf', `subtitles=subs.srt:fontsdir=/tmp:force_style='Fontname=Roboto,FontSize=30,MarginV=100,PrimaryColour=&HFFFFFF&,OutlineColour=&H0000FF&'`,
+            '-vf', `subtitles=subs.srt:fontsdir=/tmp:force_style='Fontname=Roboto,Italic=1,FontSize=30,MarginV=100,PrimaryColour=${toFfmpegColor(primaryColor)},OutlineColour=${toFfmpegColor(outlineColor)}'`,
             'output.mp4'
         ]);
         const data = await ffmpeg.readFile('output.mp4');
@@ -64,6 +71,24 @@ export default function ResultVideo({filename,transciptionItems}){
                     <SparklesIcon/>
                     Apply Caption
                 </button>
+            </div>
+            <div>
+                Primary color:
+                <input
+                    type={"color"}
+                    value={primaryColor}
+                    onChange={e => setPrimaryColor(e.target.value)}
+                    className={"bg-transparent border-black"}
+                />
+                <br/>
+                Outline color:
+                <input
+                    type={"color"}
+                    value={outlineColor}
+                    onChange={e => setOutlineColor(e.target.value)}
+                    className={"bg-transparent border-black"}
+                />
+
             </div>
             <div className={"mb-4"}>
 
