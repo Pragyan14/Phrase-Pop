@@ -4,6 +4,7 @@ import SparklesIcon from "@/components/SparklesIcon";
 import Link from "next/link";
 import '@mantine/core/styles.css';
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
+import {Navbar} from "@/components/Navbar";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -27,25 +28,18 @@ export default function RootLayout({ children }) {
       <ColorSchemeScript />
     </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#5AB2FF] text-white`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#fafbfc]`}
       >
       <MantineProvider>
 
-        <main className="p-4 max-w-2xl mx-auto">
+        <main>
 
-          <header className="flex justify-between my-8">
-            <Link href="/" className="flex gap-1">
-              <SparklesIcon/>
-              <span>PhrasePop</span>
-            </Link>
-            <nav className="flex gap-6 text-white/80">
-              <Link href="/">Home</Link>
-              <Link href="/about">About</Link>
-              <a href="mailto:pragyanpatidar14@gmail.com">Contact</a>
-            </nav>
-          </header>
+          <Navbar/>
 
-          {children}
+          <div>
+            {children}
+          </div>
+
 
         </main>
 

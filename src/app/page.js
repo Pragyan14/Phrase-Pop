@@ -1,24 +1,30 @@
-import DemoSection from "@/components/DemoSection";
 import HeaderSection from "@/components/HeaderSection";
 import UploadForm from "@/components/UploadForm";
+import {Dropzone} from "@/components/DropZone";
+import {FeaturesSection} from "@/components/FeaturesSection";
+import {Footer} from "@/components/Footer";
 
 export default function Home() {
-  return (
-    <>
+    return (
+        <>
+            <div>
+                <HeaderSection
+                    h1Text="Enhance Your Videos with Smart Captions"
+                    h2Text="PhrasePop automatically generates precise captions for your videos—ideal for content creators, educators, and businesses. "
+                />
+            </div>
 
-      <HeaderSection
-        h1Text="Add epic captions to your videos changes by v2"
-        h2Text="Just upload your videos and we will do the rest"
-      />
+            <div className={"text-center px-6 md:px-16 lg:px-16 sm:px-6"}>
+                <UploadForm/>
+            </div>
 
-      <div className="text-center">
+            <div className={"bg-white mt-24 py-16 px-6 md:px-16 lg:px-16 sm:px-6"}>
+                <FeaturesSection/>
+            </div>
 
-        <UploadForm/>
-
-      </div>
-
-      <DemoSection/>
-
-    </>
-  );
+            <div>
+                <Footer/>
+            </div>
+        </>
+    );
 }

@@ -3,6 +3,7 @@ import UploadIcon from "@/components/UploadIcons";
 import axios from "axios";
 import {useState} from "react";
 import {useRouter} from "next/navigation";
+import {Dropzone} from "@/components/DropZone";
 
 export default function UploadForm() {
 
@@ -36,11 +37,16 @@ export default function UploadForm() {
                 </div>
             )}
 
-            <label className="bg-green-400 py-2 px-6 rounded-full inline-flex gap-2 cursor-pointer">
-                <UploadIcon />
-                <span>Choose file</span>
-                <input type="file" onChange={upload} className="hidden" />
+            <label
+                className="bg-black text-white py-4 px-8 rounded-md text-lg font-normal inline-flex gap-2 cursor-pointer">
+                <UploadIcon/>
+                <span>Upload Video</span>
+                <input type="file" onChange={upload} className="hidden"/>
             </label>
+
+            <div className={"hidden sm:hidden md:block mt-32 px-6 md:px-16 lg:px-16 sm:px-6"}>
+                <Dropzone/>
+            </div>
         </>
     )
 }
