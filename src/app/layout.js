@@ -1,10 +1,9 @@
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import SparklesIcon from "@/components/SparklesIcon";
-import Link from "next/link";
 import '@mantine/core/styles.css';
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
 import {Navbar} from "@/components/Navbar";
+import {Footer} from "@/components/Footer";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -36,10 +35,9 @@ export default function RootLayout({ children }) {
 
           <Navbar/>
 
-          <div>
-            {children}
-          </div>
+          {children}
 
+          <Footer/>
 
         </main>
 

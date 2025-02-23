@@ -9,7 +9,7 @@ import robotoBold from "./../fonts/Roboto-Bold.ttf"
 import { Progress } from '@mantine/core';
 
 
-export default function ResultVideo({filename,transciptionItems}){
+export default function ResultVideo({filename,transcriptionItems}){
     const videoUrl = `https://phrase-pop.s3.amazonaws.com/${filename}`;
     const [primaryColor,setPrimaryColor] = useState("#FFFFFF");
     const [outlineColor,setOutlineColor] = useState("#000000");
@@ -43,7 +43,7 @@ export default function ResultVideo({filename,transciptionItems}){
 
     const transcode = async () => {
         const ffmpeg = ffmpegRef.current;
-        const srt = transcriptionItemToSrt(transciptionItems)
+        const srt = transcriptionItemToSrt(transcriptionItems)
         await ffmpeg.writeFile(filename, await fetchFile(videoUrl));
         await ffmpeg.writeFile("subs.srt",srt);
         const duration = videoRef.current.duration;
@@ -61,8 +61,8 @@ export default function ResultVideo({filename,transciptionItems}){
         await ffmpeg.exec([
             '-i', filename,
             '-preset','ultrafast',
-            // '-to', '00:00:05',
-            '-vf', `subtitles=subs.srt:fontsdir=/tmp:force_style='Fontname=Roboto,Italic=1,FontSize=30,MarginV=100,PrimaryColour=${toFfmpegColor(primaryColor)},OutlineColour=${toFfmpegColor(outlineColor)}'`,
+            '-to', '00:00:05',
+            '-vf', `subtitles=subs.srt:fontsdir=/tmp:force_style='Fontname=Roboto,FontSize=24,MarginV=65,PrimaryColour=${toFfmpegColor(primaryColor)},OutlineColour=${toFfmpegColor(outlineColor)}'`,
             'output.mp4'
         ]);
         const data = await ffmpeg.readFile('output.mp4');
@@ -72,7 +72,46 @@ export default function ResultVideo({filename,transciptionItems}){
 
     return(
         <>
-            <div>
+            {/*<div>*/}
+            {/*    <button*/}
+            {/*        className={"bg-green-400 py-2 px-6 rounded-full inline-flex gap-2 cursor-pointer"}*/}
+            {/*        onClick={transcode}*/}
+            {/*    >*/}
+            {/*        <SparklesIcon/>*/}
+            {/*        Apply Caption*/}
+            {/*    </button>*/}
+            {/*</div>*/}
+            {/*<div>*/}
+            {/*    Primary color:*/}
+            {/*    <input*/}
+            {/*        type={"color"}*/}
+            {/*        value={primaryColor}*/}
+            {/*        onChange={e => setPrimaryColor(e.target.value)}*/}
+            {/*        className={"bg-transparent border-black"}*/}
+            {/*    />*/}
+            {/*    <br/>*/}
+            {/*    Outline color:*/}
+            {/*    <input*/}
+            {/*        type={"color"}*/}
+            {/*        value={outlineColor}*/}
+            {/*        onChange={e => setOutlineColor(e.target.value)}*/}
+            {/*        className={"bg-transparent border-black"}*/}
+            {/*    />*/}
+            {/*</div>*/}
+
+            <div className={"row-span-1 aspect-[9/16] sm:col-start-3 sm:col-end-4 sm:row-start-1 sm:row-end-4"}>
+                {progress && progress < 1 && (
+                    <div>
+                        {/*{Math.floor(progress*100)}%*/}
+                        <Progress value={Math.floor(progress * 100)} radius="lg" size="xl" striped animated/>
+                    </div>
+                )}
+                <video className={"rounded-lg"}
+                       data-video={0}
+                       ref={videoRef}
+                       controls
+                />
+
                 <button
                     className={"bg-green-400 py-2 px-6 rounded-full inline-flex gap-2 cursor-pointer"}
                     onClick={transcode}
@@ -80,37 +119,6 @@ export default function ResultVideo({filename,transciptionItems}){
                     <SparklesIcon/>
                     Apply Caption
                 </button>
-            </div>
-            <div>
-                Primary color:
-                <input
-                    type={"color"}
-                    value={primaryColor}
-                    onChange={e => setPrimaryColor(e.target.value)}
-                    className={"bg-transparent border-black"}
-                />
-                <br/>
-                Outline color:
-                <input
-                    type={"color"}
-                    value={outlineColor}
-                    onChange={e => setOutlineColor(e.target.value)}
-                    className={"bg-transparent border-black"}
-                />
-
-            </div>
-            <div className={"mb-4"}>
-                {progress && progress < 1 && (
-                    <div>
-                        {/*{Math.floor(progress*100)}%*/}
-                        <Progress value={Math.floor(progress*100)} radius="lg" size="xl" striped animated/>
-                    </div>
-                )}
-                <video
-                    data-video={0}
-                    ref={videoRef}
-                    controls
-                />
             </div>
         </>
     )

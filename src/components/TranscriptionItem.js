@@ -3,22 +3,24 @@ export default function TranscriptionItem({item,handleStartTimeChange,handleEndT
         return '';
     }
     return (
-        <div className={"my-1 grid grid-cols-3 gap-1 items-center"}>
-            <input
-                value={item.start_time}
-                className={"bg-white/20 rounded-md p-1"}
-                onChange={handleStartTimeChange}
-            />
-            <input
-                value={item.end_time}
-                className={"bg-white/20 rounded-md p-1"}
-                onChange={handleEndTimeChange}
-            />
-            <input
-                value={item.content}
-                className={"bg-white/20 rounded-md p-1"}
-                onChange={handleContentChange}
-            />
-        </div>
+        <>
+            <div className={"grid grid-cols-3 gap-1 items-center border-t-2 border-[#e5e7eb]"}>
+                <input
+                    value={item.start_time}
+                    className={"bg-white/20 rounded-md p-1 py-2"}
+                    onChange={handleStartTimeChange}
+                />
+                <input
+                    value={item.end_time}
+                    className={"bg-white/20 rounded-md p-1 py-2"}
+                    onChange={handleEndTimeChange}
+                />
+                <input
+                    value={item.content}
+                    className={"bg-white/20 rounded-md p-1 py-2"}
+                    onChange={handleContentChange}
+                />
+            </div>
+        </>
     )
 }

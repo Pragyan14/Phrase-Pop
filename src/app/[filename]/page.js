@@ -4,12 +4,17 @@ import axios from "axios";
 import {clearTranscriptionItems} from "@/lib/awsTranscriptionHelper";
 import ResultVideo from "@/components/ResultVideo";
 import TranscriptionEditor from "@/components/TranscriptionEditor";
+import {CaptionTrial} from "@/components/CaptionTrial";
+import {CaptionCustomizer} from "@/components/CaptionCustomizer";
+import {ColorInput, Select} from "@mantine/core";
 
 export default function FilePage({params}){
     const {filename} = React.use(params);
     const [isTranscribing, setIsTranscribing] = useState(false);
     const [isFetching, setIsFetching] = useState(false);
     const [awsTranscriptionItems,setAwsTranscriptionItems] = useState([]);
+    const [primaryColor,setPrimaryColor] = useState("#FFFFFF");
+    const [fontSize,setFontSize] = useState("24pt");
 
     useEffect(()=>{
         getTranscription();
@@ -48,26 +53,44 @@ export default function FilePage({params}){
     }
 
     return(
+
         <div>
-            {/*{filename}*/}
-            {/*<div>is transcribing: {JSON.stringify(isTranscribing)}</div>*/}
-            <div className={"grid grid-cols-2 gap-16"}>
-                <div className={"max-w-xs"}>
-                    <h2 className={"text-2xl text-white/60 mb-4 text-center"}>Transcription</h2>
+            <div className={"h-[56rem] mt-28 px-6 md:px-16 lg:px-16 sm:px-6"}>
 
-                    <TranscriptionEditor
-                        awsTranscriptionItems={awsTranscriptionItems}
-                        setAwsTranscriptionItems={setAwsTranscriptionItems}
-                    />
+                <div className="grid grid-cols-1 gap-4 sm:grid-cols-4 sm:grid-rows-5">
 
-                </div>
-                <div>
-
-                    <h2 className={"text-2xl text-white/60 mb-4 text-center"}>Result</h2>
+                    <div className="overflow-y-scroll h-[49rem] border-2 border-gray-200 round row-span-1 sm:col-start-1 sm:col-end-3 sm:row-start-1 sm:row-end-6">
+                        <div className={"p-4 pb-2 sticky top-0 bg-white"}>
+                            <h3 className={"text-xl"}>Caption Editor</h3>
+                            <div className={"mt-6 grid grid-cols-3 gap-4 font-bold text-lg"}>
+                                <div>Start Time</div>
+                                <div>End Time</div>
+                                <div>Content</div>
+                            </div>
+                        </div>
+                        <div className={"px-4"}>
+                            <TranscriptionEditor
+                                awsTranscriptionItems={awsTranscriptionItems}
+                                setAwsTranscriptionItems={setAwsTranscriptionItems}
+                            />
+                        </div>
+                    </div>
 
                     <ResultVideo
                         filename={filename}
-                        transciptionItems = {awsTranscriptionItems}
+                        transcriptionItems={awsTranscriptionItems}
+                    />
+
+                    <CaptionTrial
+                        primaryColor={primaryColor}
+                        fontSize={fontSize}
+                    />
+
+                    <CaptionCustomizer
+                        primaryColor={primaryColor}
+                        setPrimaryColor={setPrimaryColor}
+                        fontSize={fontSize}
+                        setFontSize={setFontSize}
                     />
 
                 </div>

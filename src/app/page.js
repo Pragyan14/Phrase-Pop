@@ -1,8 +1,6 @@
 import HeaderSection from "@/components/HeaderSection";
 import UploadForm from "@/components/UploadForm";
-import {Dropzone} from "@/components/DropZone";
 import {FeaturesSection} from "@/components/FeaturesSection";
-import {Footer} from "@/components/Footer";
 
 export default function Home() {
     return (
@@ -22,9 +20,6 @@ export default function Home() {
                 <FeaturesSection/>
             </div>
 
-            <div>
-                <Footer/>
-            </div>
         </>
     );
 }
