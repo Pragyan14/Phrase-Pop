@@ -1,6 +1,7 @@
 'use client'
 import { Trash2, Upload } from "lucide-react"
 import {ColorInput, Select} from "@mantine/core";
+import React from "react";
 
 export default function AboutPage(){
 
@@ -36,29 +37,28 @@ export default function AboutPage(){
             <div className="container my-28 px-6 md:px-16 lg:px-16 sm:px-6">
                 <div className="grid lg:grid-cols-2 gap-6">
                     {/* Left Column */}
-                    <div className="space-y-6">
+                    <div className="space-y-6 ">
                         <div>
                             <h2 className="text-2xl font-semibold">Caption Editor</h2>
                         </div>
 
-                        <div className="border rounded-lg">
-                            <div className="grid grid-cols-[1fr_1fr_2fr_auto] gap-4 p-4 bg-muted font-medium">
-                                <div>Start Time</div>
-                                <div>End Time</div>
-                                <div>Content</div>
-                                <div></div>
+                            <div className="border rounded-lg max-h-[500px] overflow-y-auto">
+                                <div className="grid grid-cols-[1fr_1fr_2fr] gap-4 sticky top-0 bg-white border-b p-4 font-medium">
+                                    <div>Start Time</div>
+                                    <div>End Time</div>
+                                    <div>Content</div>
+                                </div>
+                                <div>
+                                    {captions.map((caption, index) => (
+                                        <div key={index}
+                                             className="grid grid-cols-[1fr_1fr_2fr] gap-4 px-4 py-2 border-t items-center">
+                                            <input className={"w-full h-8"} value={caption.startTime}></input>
+                                            <input className={"w-full h-8"} value={caption.endTime}></input>
+                                            <input className={"w-full h-8"} value={caption.content}></input>
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                            <div className="max-h-[400px] overflow-y-auto">
-                                {captions.map((caption, index) => (
-                                    <div key={index}
-                                         className="grid grid-cols-[1fr_1fr_2fr_auto] gap-4 p-4 border-t items-center">
-                                        <div>{caption.startTime}</div>
-                                        <div>{caption.endTime}</div>
-                                        <div>{caption.content}</div>
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
                     </div>
 
                     {/* Right Column */}

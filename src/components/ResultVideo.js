@@ -72,32 +72,6 @@ export default function ResultVideo({filename,transcriptionItems}){
 
     return(
         <>
-            {/*<div>*/}
-            {/*    <button*/}
-            {/*        className={"bg-green-400 py-2 px-6 rounded-full inline-flex gap-2 cursor-pointer"}*/}
-            {/*        onClick={transcode}*/}
-            {/*    >*/}
-            {/*        <SparklesIcon/>*/}
-            {/*        Apply Caption*/}
-            {/*    </button>*/}
-            {/*</div>*/}
-            {/*<div>*/}
-            {/*    Primary color:*/}
-            {/*    <input*/}
-            {/*        type={"color"}*/}
-            {/*        value={primaryColor}*/}
-            {/*        onChange={e => setPrimaryColor(e.target.value)}*/}
-            {/*        className={"bg-transparent border-black"}*/}
-            {/*    />*/}
-            {/*    <br/>*/}
-            {/*    Outline color:*/}
-            {/*    <input*/}
-            {/*        type={"color"}*/}
-            {/*        value={outlineColor}*/}
-            {/*        onChange={e => setOutlineColor(e.target.value)}*/}
-            {/*        className={"bg-transparent border-black"}*/}
-            {/*    />*/}
-            {/*</div>*/}
 
             <div className={"row-span-1 aspect-[9/16] sm:col-start-3 sm:col-end-4 sm:row-start-1 sm:row-end-4"}>
                 {progress && progress < 1 && (
@@ -112,13 +86,16 @@ export default function ResultVideo({filename,transcriptionItems}){
                        controls
                 />
 
-                <button
-                    className={"bg-green-400 py-2 px-6 rounded-full inline-flex gap-2 cursor-pointer"}
-                    onClick={transcode}
-                >
-                    <SparklesIcon/>
-                    Apply Caption
-                </button>
+                {/*<button*/}
+                {/*    className={"bg-green-400 py-2 px-6 rounded-full inline-flex gap-2 cursor-pointer"}*/}
+                {/*    onClick={transcode}*/}
+                {/*>*/}
+                {/*    <SparklesIcon/>*/}
+                {/*    Apply Caption*/}
+                {/*</button>*/}
+
+                
+
             </div>
         </>
     )

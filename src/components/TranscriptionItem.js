@@ -4,20 +4,20 @@ export default function TranscriptionItem({item,handleStartTimeChange,handleEndT
     }
     return (
         <>
-            <div className={"grid grid-cols-3 gap-1 items-center border-t-2 border-[#e5e7eb]"}>
+            <div className={"grid grid-cols-[1fr_1fr_2fr] gap-4 px-4 py-1 border-t items-center"}>
                 <input
+                    className={"w-full h-8 rounded-md"}
                     value={item.start_time}
-                    className={"bg-white/20 rounded-md p-1 py-2"}
                     onChange={handleStartTimeChange}
                 />
                 <input
+                    className={"w-full h-8 rounded-md"}
                     value={item.end_time}
-                    className={"bg-white/20 rounded-md p-1 py-2"}
                     onChange={handleEndTimeChange}
                 />
                 <input
+                    className={"w-full h-8 rounded-md"}
                     value={item.content}
-                    className={"bg-white/20 rounded-md p-1 py-2"}
                     onChange={handleContentChange}
                 />
             </div>

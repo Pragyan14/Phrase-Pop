@@ -15,12 +15,6 @@ export default function TranscriptionEditor({awsTranscriptionItems, setAwsTransc
 
     return(
         <>
-            {/*<div className={"grid grid-cols-3 sticky top-0 bg-violet-800/80 rounded-md p-2"}>*/}
-            {/*    <div>Start</div>*/}
-            {/*    <div>End</div>*/}
-            {/*    <div>Content</div>*/}
-            {/*</div>*/}
-
             {awsTranscriptionItems.length > 0 && (
                 <div>
                     { awsTranscriptionItems.map((item,key) => (
