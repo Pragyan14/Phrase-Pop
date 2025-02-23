@@ -5,3 +5,13 @@
 .round{
     @apply rounded-xl;
 }
+
+@layer utilities {
+    .text-outline {
+        text-shadow:
+                -1px -1px 0 red,
+                1px -1px 0 red,
+                -1px 1px 0 red,
+                1px 1px 0 red;
+    }
+}

@@ -1,18 +1,20 @@
 'use client';
 import SparklesIcon from "@/components/SparklesIcon";
-import {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {FFmpeg} from '@ffmpeg/ffmpeg';
 import {fetchFile, toBlobURL} from '@ffmpeg/util';
 import {transcriptionItemToSrt} from "@/lib/awsTranscriptionHelper";
 import roboto from "./../fonts/Roboto-Regular.ttf"
 import robotoBold from "./../fonts/Roboto-Bold.ttf"
-import { Progress } from '@mantine/core';
+import {Progress} from '@mantine/core';
+import {CaptionCustomizer} from "@/components/CaptionCustomizer";
+import {CaptionPreview} from "@/components/CaptionPreview";
 
 
 export default function ResultVideo({filename,transcriptionItems}){
     const videoUrl = `https://phrase-pop.s3.amazonaws.com/${filename}`;
     const [primaryColor,setPrimaryColor] = useState("#FFFFFF");
-    const [outlineColor,setOutlineColor] = useState("#000000");
+    const [fontSize,setFontSize] = useState("24pt");
     const [progress,setProgress] = useState(1);
     const [videoSrc,setVideoSrc] = useState('0');
     const [loaded, setLoaded] = useState(false);
@@ -47,7 +49,6 @@ export default function ResultVideo({filename,transcriptionItems}){
         await ffmpeg.writeFile(filename, await fetchFile(videoUrl));
         await ffmpeg.writeFile("subs.srt",srt);
         const duration = videoRef.current.duration;
-        // console.log(duration);
         ffmpeg.on('log', ({ message }) => {
             const regResult = /time=([0-9:.]+)/.exec(message);
             if(regResult && regResult?.[1]){
@@ -62,7 +63,7 @@ export default function ResultVideo({filename,transcriptionItems}){
             '-i', filename,
             '-preset','ultrafast',
             '-to', '00:00:05',
-            '-vf', `subtitles=subs.srt:fontsdir=/tmp:force_style='Fontname=Roboto,FontSize=24,MarginV=65,PrimaryColour=${toFfmpegColor(primaryColor)},OutlineColour=${toFfmpegColor(outlineColor)}'`,
+            '-vf', `subtitles=subs.srt:fontsdir=/tmp:force_style='Fontname=Roboto,FontSize=${fontSize.slice(0,2)},MarginV=64,PrimaryColour=${toFfmpegColor(primaryColor)}'`,
             'output.mp4'
         ]);
         const data = await ffmpeg.readFile('output.mp4');
@@ -72,31 +73,42 @@ export default function ResultVideo({filename,transcriptionItems}){
 
     return(
         <>
+            <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-6">
+                    <div className="relative bg-slate-900 rounded-lg aspect-[9/16] flex items-center justify-center">
+                        <div
+                            className={"row-span-1 aspect-[9/16] sm:col-start-3 sm:col-end-4 sm:row-start-1 sm:row-end-4"}>
+                            {progress && progress < 1 && (
+                                <div>
+                                    <Progress value={Math.floor(progress * 100)} radius="lg" size="xl" striped
+                                              animated/>
+                                </div>
+                            )}
+                            <video className={"rounded-lg"}
+                                   data-video={0}
+                                   ref={videoRef}
+                                   controls
+                            />
 
-            <div className={"row-span-1 aspect-[9/16] sm:col-start-3 sm:col-end-4 sm:row-start-1 sm:row-end-4"}>
-                {progress && progress < 1 && (
-                    <div>
-                        {/*{Math.floor(progress*100)}%*/}
-                        <Progress value={Math.floor(progress * 100)} radius="lg" size="xl" striped animated/>
+                        </div>
                     </div>
-                )}
-                <video className={"rounded-lg"}
-                       data-video={0}
-                       ref={videoRef}
-                       controls
+
+                    <div>
+                        <CaptionPreview primaryColor={primaryColor} fontSize={fontSize} />
+                    </div>
+
+                </div>
+
+                <CaptionCustomizer
+                    fontSize={fontSize}
+                    primaryColor={primaryColor}
+                    setFontSize={setFontSize}
+                    setPrimaryColor={setPrimaryColor}
+                    transcode={transcode}
                 />
 
-                {/*<button*/}
-                {/*    className={"bg-green-400 py-2 px-6 rounded-full inline-flex gap-2 cursor-pointer"}*/}
-                {/*    onClick={transcode}*/}
-                {/*>*/}
-                {/*    <SparklesIcon/>*/}
-                {/*    Apply Caption*/}
-                {/*</button>*/}
-
-                
-
             </div>
+
         </>
     )
 }

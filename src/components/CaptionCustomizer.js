@@ -1,32 +1,44 @@
 'use client'
 import {ColorInput, Select} from "@mantine/core";
+import React from "react";
 
-export function CaptionCustomizer({primaryColor,setPrimaryColor,fontSize,setFontSize}){
+export function CaptionCustomizer({primaryColor,setPrimaryColor,fontSize,setFontSize,transcode}){
 
     return (
         <>
-            <div
-                className="p-4 h-[13rem] border-2 border-gray-200 round row-span-1 sm:col-start-3 sm:col-end-5 sm:row-start-4 sm:row-end-6">
-                <h3 className={"text-xl mb-4"}>Caption Customization</h3>
-                <div className={"grid grid-cols-2 gap-4 "}>
+            <div className="space-y-6 border p-4 rounded-lg ">
+                <h3 className="text-xl font-semibold">Caption Customization</h3>
+                <div className="grid sm:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                        <ColorInput label="Primary Color" value={primaryColor} onChange={setPrimaryColor}/>
+                    </div>
 
-                    <ColorInput label="Primary Color" value={primaryColor} onChange={setPrimaryColor}/>
+                    <div className="space-y-2">
+                        <ColorInput label="Outline Color" value={primaryColor} onChange={setPrimaryColor}/>
+                    </div>
 
-                    <Select
-                        label="Font size"
-                        placeholder="Pick value"
-                        value={fontSize}
-                        onChange={setFontSize}
-                        data={['16pt', '18pt', '24pt', '32pt']}
-                    />
+                    <div className="space-y-2">
+                        <ColorInput label="Background Color" value={primaryColor} onChange={setPrimaryColor}/>
+                    </div>
+
+                    <div className="space-y-2">
+                        <Select
+                            label="Font size"
+                            placeholder="Pick value"
+                            value={fontSize}
+                            onChange={setFontSize}
+                            data={['16pt', '18pt', '24pt', '32pt']}
+                        />
+                    </div>
 
                 </div>
-                <div>
-                    <button className="w-full mt-4 rounded-lg bg-black text-white h-12 text-center">
-                        {/*<Upload className="w-4 h-4 mr-2"/>*/}
-                        Apply Captions
-                    </button>
-                </div>
+
+                <button
+                    className="w-full rounded-lg bg-black text-white h-12 text-center"
+                    onClick={transcode}
+                >
+                    Apply Captions
+                </button>
             </div>
         </>
     )

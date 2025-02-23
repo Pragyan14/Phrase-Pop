@@ -2,6 +2,7 @@
 import { Trash2, Upload } from "lucide-react"
 import {ColorInput, Select} from "@mantine/core";
 import React from "react";
+import {CaptionPreview} from "@/components/CaptionPreview";
 
 export default function AboutPage(){
 
@@ -69,9 +70,8 @@ export default function AboutPage(){
                                 className="relative bg-slate-900 rounded-lg aspect-[9/16] flex items-center justify-center">
                                 <span className="text-white">Original Video</span>
                             </div>
-                            <div
-                                className="relative bg-slate-900 rounded-lg aspect-[9/16] flex items-center justify-center">
-                                <span className="text-white">Caption Preview</span>
+                            <div>
+                                <CaptionPreview primaryColor={"#FFFFFF"} fontSize={"24pt"} />
                             </div>
                         </div>
 
