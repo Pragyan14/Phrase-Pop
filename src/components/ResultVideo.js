@@ -13,7 +13,9 @@ import {CaptionPreview} from "@/components/CaptionPreview";
 export default function ResultVideo({filename,transcriptionItems}){
     const videoUrl = `https://phrase-pop.s3.amazonaws.com/${filename}`;
     const [primaryColor,setPrimaryColor] = useState("#FFFFFF");
+    const [outlineColor,setOutlineColor] = useState("#000000");
     const [fontSize,setFontSize] = useState("24pt");
+    const [previewBgColor,setPreviewBgColor] = useState("#0f172a");
     const [progress,setProgress] = useState(1);
     const [videoSrc,setVideoSrc] = useState('0');
     const [loaded, setLoaded] = useState(false);
@@ -71,7 +73,7 @@ export default function ResultVideo({filename,transcriptionItems}){
             '-i', filename,
             '-preset','ultrafast',
             '-to', '00:00:05',
-            '-vf', `subtitles=subs.srt:fontsdir=/tmp:force_style='Fontname=Roboto,FontSize=${fontSize.slice(0,2)},MarginV=64,PrimaryColour=${toFfmpegColor(primaryColor)}'`,
+            '-vf', `subtitles=subs.srt:fontsdir=/tmp:force_style='Fontname=Roboto,FontSize=${fontSize.slice(0,2)},MarginV=64,PrimaryColour=${toFfmpegColor(primaryColor)},OutlineColour=${toFfmpegColor(outlineColor)}'`,
             'output.mp4'
         ]);
         const data = await ffmpeg.readFile('output.mp4');
@@ -102,7 +104,12 @@ export default function ResultVideo({filename,transcriptionItems}){
                     </div>
 
                     <div>
-                        <CaptionPreview primaryColor={primaryColor} fontSize={fontSize} />
+                        <CaptionPreview
+                            primaryColor={primaryColor}
+                            fontSize={fontSize}
+                            previewBgColor={previewBgColor}
+                            outlineColor={outlineColor}
+                        />
                     </div>
 
                 </div>
@@ -112,6 +119,10 @@ export default function ResultVideo({filename,transcriptionItems}){
                     primaryColor={primaryColor}
                     setFontSize={setFontSize}
                     setPrimaryColor={setPrimaryColor}
+                    previewBgColor={previewBgColor}
+                    setPreviewBgColor={setPreviewBgColor}
+                    outlineColor={outlineColor}
+                    setOutlineColor={setOutlineColor}
                     transcode={transcode}
                 />
 

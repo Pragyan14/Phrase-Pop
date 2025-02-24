@@ -2,7 +2,9 @@
 import {ColorInput, Select} from "@mantine/core";
 import React from "react";
 
-export function CaptionCustomizer({primaryColor,setPrimaryColor,fontSize,setFontSize,transcode}){
+export function CaptionCustomizer(
+    {primaryColor,setPrimaryColor,fontSize,setFontSize,previewBgColor,setPreviewBgColor,transcode,outlineColor,setOutlineColor}
+){
 
     return (
         <>
@@ -14,11 +16,11 @@ export function CaptionCustomizer({primaryColor,setPrimaryColor,fontSize,setFont
                     </div>
 
                     <div className="space-y-2">
-                        <ColorInput label="Outline Color" value={primaryColor} onChange={setPrimaryColor}/>
+                        <ColorInput label="Outline Color" value={outlineColor} onChange={setOutlineColor}/>
                     </div>
 
                     <div className="space-y-2">
-                        <ColorInput label="Background Color" value={primaryColor} onChange={setPrimaryColor}/>
+                        <ColorInput label="Background Color" value={previewBgColor} onChange={setPreviewBgColor}/>
                     </div>
 
                     <div className="space-y-2">
