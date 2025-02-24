@@ -1,5 +1,4 @@
 'use client';
-import SparklesIcon from "@/components/SparklesIcon";
 import React, {useEffect, useRef, useState} from "react";
 import {FFmpeg} from '@ffmpeg/ffmpeg';
 import {fetchFile, toBlobURL} from '@ffmpeg/util';
@@ -18,18 +17,27 @@ export default function ResultVideo({filename,transcriptionItems}){
     const [progress,setProgress] = useState(1);
     const [videoSrc,setVideoSrc] = useState('0');
     const [loaded, setLoaded] = useState(false);
-    const ffmpegRef = useRef(new FFmpeg());
+    const ffmpegRef = useRef(null);
     const videoRef = useRef(null);
     const messageRef = useRef(null);
 
     useEffect(()=>{
-        videoRef.current.src = videoUrl;
-        load();
+        if (typeof window !== 'undefined') {
+            videoRef.current.src = videoUrl;
+            load();
+        }
     },[])
 
     const load = async () => {
+        if (typeof window === 'undefined') return;
+
+        const { FFmpeg } = await import('@ffmpeg/ffmpeg');
+        const { fetchFile, toBlobURL } = await import('@ffmpeg/util');
+
         const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/umd'
-        const ffmpeg = ffmpegRef.current;
+        const ffmpeg = new FFmpeg();
+        ffmpegRef.current = ffmpeg;
+
         await ffmpeg.load({
             coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
             wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm'),
