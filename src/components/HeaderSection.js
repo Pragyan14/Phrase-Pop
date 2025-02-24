@@ -3,7 +3,7 @@ export default function HeaderSection({
     h2Text = "SubHead"
 }){
     return(
-        <section className="text-center mt-[150px] mb-8">
+        <section className="text-center mt-[150px] mb-8 px-6 md:px-16 lg:px-16 sm:px-6">
             <h1 className="text-5xl md:text-6xl  sm:text-4xl leading-[1.1]">
                 {h1Text}
             </h1>

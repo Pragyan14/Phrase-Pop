@@ -8,9 +8,10 @@ export function Dropzone({
                              onFileSelect,
                              maxSize = 10 * 1024 * 1024, // 500MB default
                              acceptedTypes = {
-                                 "video/mp4": [".mp4"], "video/quicktime": [".mov"], "video/x-msvideo": [".avi"],
-                             }, maxSizeLabel = "10MB", supportedFormatsLabel = "MP4, MOV, AVI",})
+                                 "video/mp4": [".mp4"],
+                             }, maxSizeLabel = "10MB", supportedFormatsLabel = "MP4",})
 {
+
     const [error, setError] = useState(null)
 
     const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
