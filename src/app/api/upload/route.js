@@ -1,10 +1,21 @@
 import {PutObjectCommand, S3Client} from "@aws-sdk/client-s3";
 import uniqid from 'uniqid';
 
+const MAX_FILE_SIZE = 10 * 1024 * 1024;
+
 export async function POST(req){
 
     const formData = await req.formData();
     const file = formData.get('file');
+
+    if (!file) {
+        return Response.json({ error: "No file uploaded" }, { status: 400 });
+    }
+
+    if (file.size > MAX_FILE_SIZE) {
+        return Response.json({ error: "File size exceeds 10MB limit" }, { status: 413 });
+    }
+
     const {name,type} = file;
     const data = await file.arrayBuffer();
 

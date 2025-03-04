@@ -5,12 +5,11 @@ import {clearTranscriptionItems} from "@/lib/awsTranscriptionHelper";
 import ResultVideo from "@/components/ResultVideo";
 import TranscriptionEditor from "@/components/TranscriptionEditor";
 import {CaptionCustomizer} from "@/components/CaptionCustomizer";
-import {ColorInput, Select} from "@mantine/core";
+import {ColorInput, Loader, Select} from "@mantine/core";
 
 export default function FilePage({params}){
     const {filename} = React.use(params);
-    const [isTranscribing, setIsTranscribing] = useState(false);
-    const [isFetching, setIsFetching] = useState(false);
+    const [isFetching, setIsFetching] = useState(true);
     const [awsTranscriptionItems,setAwsTranscriptionItems] = useState([]);
     const [primaryColor,setPrimaryColor] = useState("#FFFFFF");
     const [fontSize,setFontSize] = useState("24pt");
@@ -20,17 +19,14 @@ export default function FilePage({params}){
     },[filename]);
 
     function getTranscription(){
-        setIsFetching(true);
         axios.get('/api/transcribe?filename='+filename).then(response => {
-            setIsFetching(false);
             const status = response.data?.status;
             const transcription = response.data?.transcription;
 
             if(status === "IN_PROGRESS"){
-                setIsTranscribing(true);
                 setTimeout(getTranscription,5000);
             }else {
-                setIsTranscribing(false);
+                setIsFetching(false);
 
                 setAwsTranscriptionItems(
                     clearTranscriptionItems(transcription.results.items) // removes punctuation(, . ?)
@@ -41,13 +37,9 @@ export default function FilePage({params}){
 
     if(isFetching){
         return(
-            <div>Fetching your file...</div>
-        )
-    }
-
-    if(isTranscribing){
-        return(
-            <div>Transcribing your file...</div>
+            <div className="bg-white h-screen fixed inset-0 flex justify-center items-center z-[1000]">
+                <Loader color="black" size="xl" type="bars" />
+            </div>
         )
     }
 
@@ -62,7 +54,7 @@ export default function FilePage({params}){
                             <h2 className="text-2xl font-semibold">Caption Editor</h2>
                         </div>
 
-                        <div className="border rounded-lg max-h-[500px] overflow-y-auto">
+                        <div className="border rounded-lg max-h-[600px] overflow-y-auto md:max-h-[858px] sm:max-h-[600px]">
                             <div className="grid grid-cols-[1fr_1fr_2fr] gap-4 p-4 sticky top-0 bg-white font-medium min-w-0">
                                 <div>Start Time</div>
                                 <div>End Time</div>

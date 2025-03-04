@@ -3,15 +3,8 @@
 import HeaderSection from "@/components/HeaderSection";
 import UploadForm from "@/components/UploadForm";
 import {FeaturesSection} from "@/components/FeaturesSection";
-import {useState} from "react";
-import {Loader} from "@mantine/core";
-import {Navbar} from "@/components/Navbar";
 
 export default function Home() {
-
-    // const [isUploading,setIsUploading] = useState(false);
-
-    // setIsUploading(true)
 
     return (
         <>

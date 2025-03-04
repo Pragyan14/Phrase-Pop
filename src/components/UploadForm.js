@@ -31,7 +31,6 @@ export default function UploadForm() {
     }
 
     async function upload(file){
-        // console.log(file)
         setIsUploading(true);  // loading screen set to true
         const res = await axios.postForm('/api/upload',{file,});  // upload
         setIsUploading(false);  // loading screen set to false

@@ -72,7 +72,7 @@ export default function ResultVideo({filename,transcriptionItems}){
         await ffmpeg.exec([
             '-i', filename,
             '-preset','ultrafast',
-            '-to', '00:00:05',
+            // '-to', '00:00:05',
             '-vf', `subtitles=subs.srt:fontsdir=/tmp:force_style='Fontname=Roboto,FontSize=${fontSize.slice(0,2)},MarginV=64,PrimaryColour=${toFfmpegColor(primaryColor)},OutlineColour=${toFfmpegColor(outlineColor)}'`,
             'output.mp4'
         ]);
@@ -88,12 +88,6 @@ export default function ResultVideo({filename,transcriptionItems}){
                     <div className="relative bg-slate-900 rounded-lg aspect-[9/16] flex items-center justify-center">
                         <div
                             className={"row-span-1 aspect-[9/16] sm:col-start-3 sm:col-end-4 sm:row-start-1 sm:row-end-4"}>
-                            {progress && progress < 1 && (
-                                <div>
-                                    <Progress value={Math.floor(progress * 100)} radius="lg" size="xl" striped
-                                              animated/>
-                                </div>
-                            )}
                             <video className={"rounded-lg"}
                                    data-video={0}
                                    ref={videoRef}
@@ -111,8 +105,13 @@ export default function ResultVideo({filename,transcriptionItems}){
                             outlineColor={outlineColor}
                         />
                     </div>
-
                 </div>
+
+                {progress && progress < 1 && (
+                    <div>
+                        <Progress color="#639CD9" value={Math.floor(progress * 100)} radius="lg" size="xl" striped animated/>
+                    </div>
+                )}
 
                 <CaptionCustomizer
                     fontSize={fontSize}

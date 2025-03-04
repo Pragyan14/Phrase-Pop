@@ -27,7 +27,7 @@ export default function RootLayout({ children }) {
       <ColorSchemeScript />
     </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#fafbfc]`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#FBFBFB]`}
       >
       <MantineProvider>
 
