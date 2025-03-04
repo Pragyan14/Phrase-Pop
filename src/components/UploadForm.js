@@ -47,7 +47,7 @@ export default function UploadForm() {
             )}
 
             <label
-                className="bg-black text-white py-4 px-8 rounded-md text-lg font-normal inline-flex gap-2 cursor-pointer">
+                className="bg-black text-white py-4 px-8 rounded-md text-lg font-normal inline-flex gap-2 cursor-pointer transition duration-300 ease-in-out transform hover: hover:scale-105">
                 <UploadIcon/>
                 <span>Upload Video</span>
                 <input

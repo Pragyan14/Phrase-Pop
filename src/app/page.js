@@ -14,7 +14,7 @@ export default function Home() {
 
                 <div>
                     <HeaderSection
-                        h1Text="Enhance Your Videos with Smart Captions"
+                        h1Text="Enhance Your Reels with Smart Captions"
                         h2Text="PhrasePop automatically generates precise captions for your videos—ideal for content creators, educators, and businesses. "
                     />
                 </div>
