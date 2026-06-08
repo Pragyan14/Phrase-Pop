@@ -2,6 +2,106 @@
 @tailwind components;
 @tailwind utilities;
 
-.round{
-    @apply rounded-xl;
+.round {
+  @apply rounded-xl;
+}
+
+/* ── Glassmorphism page background ── */
+body {
+  background: linear-gradient(135deg, #e0e7ff 0%, #f0fdf4 45%, #fdf4ff 100%) !important;
+  min-height: 100vh;
+}
+
+/* Decorative background blobs */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  pointer-events: none;
+  z-index: 0;
+}
+
+body::before {
+  width: 500px;
+  height: 500px;
+  background: #a5b4fc;
+  top: -120px;
+  left: -100px;
+}
+
+body::after {
+  width: 400px;
+  height: 400px;
+  background: #86efac;
+  top: 300px;
+  right: -80px;
+}
+
+/* Extra blobs via a wrapper — added in layout */
+.blob-pink {
+  position: fixed;
+  width: 300px;
+  height: 300px;
+  background: #f9a8d4;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  bottom: 200px;
+  left: 80px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.blob-yellow {
+  position: fixed;
+  width: 250px;
+  height: 250px;
+  background: #fde68a;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.35;
+  bottom: 60px;
+  right: 100px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Glass utility classes */
+.glass {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 0.5px solid rgba(255, 255, 255, 0.75);
+}
+
+.glass-light {
+  background: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 0.5px solid rgba(255, 255, 255, 0.55);
+}
+
+/* Make sure content sits above blobs */
+main {
+  position: relative;
+  z-index: 1;
+}
+
+/* Font wiring */
+body {
+  font-family: var(--font-dm-sans), sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-sora), sans-serif;
+}
+
+/* Tighten the upload form inside the card */
+#upload .text-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }

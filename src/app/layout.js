@@ -1,18 +1,20 @@
-import { Geist, Geist_Mono } from "next/font/google";
+import { Sora, DM_Sans } from "next/font/google";
 import "./globals.css";
 import '@mantine/core/styles.css';
 import { ColorSchemeScript, MantineProvider, mantineHtmlProps } from '@mantine/core';
-import {Navbar} from "@/components/Navbar";
-import {Footer} from "@/components/Footer";
+import { Navbar } from "@/components/Navbar";
+import { Footer } from "@/components/Footer";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const sora = Sora({
+  variable: "--font-sora",
   subsets: ["latin"],
+  weight: ["400", "500", "600"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const dmSans = DM_Sans({
+  variable: "--font-dm-sans",
   subsets: ["latin"],
+  weight: ["400", "500"],
 });
 
 export const metadata = {
@@ -23,25 +25,26 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en" {...mantineHtmlProps}>
-    <head>
-      <ColorSchemeScript />
-    </head>
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#FBFBFB]`}
-      >
-      <MantineProvider>
+      <head>
+        <ColorSchemeScript />
+      </head>
+      <body className={`${sora.variable} ${dmSans.variable} antialiased`}>
+        <MantineProvider>
 
-        <main>
+          <main>
 
-          <Navbar/>
+            <div className="blob-pink" aria-hidden="true" />
+            <div className="blob-yellow" aria-hidden="true" />
 
-          {children}
+            <Navbar />
 
-          <Footer/>
+            {children}
 
-        </main>
+            <Footer />
 
-      </MantineProvider>
+          </main>
+
+        </MantineProvider>
       </body>
     </html>
   );

@@ -5,63 +5,82 @@ import {useCallback, useState} from "react"
 import {useDropzone} from "react-dropzone"
 
 export function Dropzone({
-                             onFileSelect,
-                             maxSize = 10 * 1024 * 1024, // 500MB default
-                             acceptedTypes = {
-                                 "video/mp4": [".mp4"],
-                             }, maxSizeLabel = "10MB", supportedFormatsLabel = "MP4",})
-{
-
+    onFileSelect,
+    maxSize = 10 * 1024 * 1024,
+    acceptedTypes = {"video/mp4": [".mp4"]},
+    maxSizeLabel = "10MB",
+    supportedFormatsLabel = "MP4",
+}) {
     const [error, setError] = useState(null)
 
     const onDrop = useCallback((acceptedFiles, rejectedFiles) => {
         if (rejectedFiles && rejectedFiles.length > 0) {
             const firstRejection = rejectedFiles[0]
             if (firstRejection.errors[0].code === "file-too-large") {
-                setError(`File is too large. Maximum size is ${maxSizeLabel}`)
+                setError(`File too large. Max size is ${maxSizeLabel}`)
             } else if (firstRejection.errors[0].code === "file-invalid-type") {
-                setError(`Invalid file type. Supported formats: ${supportedFormatsLabel}`)
+                setError(`Invalid type. Supported: ${supportedFormatsLabel}`)
             } else {
                 setError(firstRejection.errors[0].message)
             }
             return
         }
-
         if (acceptedFiles && acceptedFiles.length > 0) {
             setError(null)
             onFileSelect(acceptedFiles[0])
         }
-    }, [maxSizeLabel, supportedFormatsLabel, onFileSelect],)
+    }, [maxSizeLabel, supportedFormatsLabel, onFileSelect])
 
-    const {getRootProps, getInputProps, isDragActive} = useDropzone({
-        onDrop, maxSize, accept: acceptedTypes, multiple: false,
+    const {getRootProps, getInputProps, isDragActive, open} = useDropzone({
+        onDrop,
+        maxSize,
+        accept: acceptedTypes,
+        multiple: false,
+        noClick: true,
+        noKeyboard: true,
     })
 
-    return (<div className="w-full max-w-3xl mx-auto">
+    return (
         <div
             {...getRootProps()}
-            className={`relative cursor-pointer rounded-lg border-2 border-dashed border-gray-300 p-12 text-center transition-colors
-          ${isDragActive ? "border-blue-500 bg-blue-50" : "hover:bg-gray-50"}`}
+            className={`rounded-xl border-2 border-dashed p-10 text-center transition-all duration-200
+                ${isDragActive
+                    ? "border-indigo-400 bg-indigo-50/60"
+                    : "border-gray-200/80"
+                }`}
+            style={{
+                background: isDragActive ? undefined : 'rgba(255,255,255,0.15)',
+            }}
         >
             <input {...getInputProps()} />
-            <div className="flex flex-col items-center gap-4">
-                <CloudUp className={`h-12 w-12 ${isDragActive ? "text-blue-500" : "text-gray-400"}`}/>
-                <div className="flex flex-col items-center gap-2">
-                    <p className="text-xl font-medium text-gray-900">Drag and drop your video here</p>
-                    <p className="text-sm text-gray-500">or</p>
-                    <button
-                        type="button"
-                        className="rounded-md bg-white px-4 py-2 text-sm font-medium text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50"
-                    >
-                        Browse Files
-                    </button>
-                </div>
-                <p className="text-sm text-gray-500">
+
+            <div className="flex flex-col items-center gap-3">
+                <CloudUp className={`h-10 w-10 transition-colors ${isDragActive ? "text-indigo-400" : "text-gray-300"}`} />
+
+                <p className="text-base font-semibold text-gray-700">
+                    Drag and drop your video here
+                </p>
+                <p className="text-sm text-gray-400">or</p>
+
+                <button
+                    type="button"
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        open()
+                    }}
+                    className="rounded-lg px-5 py-1.5 text-sm font-medium text-indigo-600
+                               ring-1 ring-indigo-200 transition-all duration-200
+                               hover:ring-indigo-400 hover:bg-indigo-50/60"
+                    style={{ background: 'rgba(255,255,255,0.7)' }}
+                >
+                    Browse Files
+                </button>
+
+                <p className="text-xs text-gray-400 mt-1">
                     Supported formats: {supportedFormatsLabel} (Max size: {maxSizeLabel})
                 </p>
-                {error && <p className="text-sm text-red-500">{error}</p>}
+                {error && <p className="text-xs text-red-500">{error}</p>}
             </div>
         </div>
-    </div>)
+    )
 }
-
