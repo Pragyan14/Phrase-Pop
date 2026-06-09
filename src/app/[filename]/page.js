@@ -1,83 +1,89 @@
 'use client';
-import React, {useEffect, useState} from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
-import {clearTranscriptionItems} from "@/lib/awsTranscriptionHelper";
+import { clearTranscriptionItems } from "@/lib/awsTranscriptionHelper";
 import ResultVideo from "@/components/ResultVideo";
 import TranscriptionEditor from "@/components/TranscriptionEditor";
-import {CaptionCustomizer} from "@/components/CaptionCustomizer";
-import {ColorInput, Loader, Select} from "@mantine/core";
+import { Loader } from "@mantine/core";
+import Image from "next/image";
 
-export default function FilePage({params}){
-    const {filename} = React.use(params);
+export default function FilePage({ params }) {
+    const { filename } = React.use(params);
     const [isFetching, setIsFetching] = useState(true);
-    const [awsTranscriptionItems,setAwsTranscriptionItems] = useState([]);
-    const [primaryColor,setPrimaryColor] = useState("#FFFFFF");
-    const [fontSize,setFontSize] = useState("24pt");
+    const [awsTranscriptionItems, setAwsTranscriptionItems] = useState([]);
 
-    useEffect(()=>{
+    useEffect(() => {
         getTranscription();
-    },[filename]);
+    }, [filename]);
 
-    function getTranscription(){
-        axios.get('/api/transcribe?filename='+filename).then(response => {
+    function getTranscription() {
+        axios.get('/api/transcribe?filename=' + filename).then(response => {
             const status = response.data?.status;
             const transcription = response.data?.transcription;
-
-            if(status === "IN_PROGRESS"){
-                setTimeout(getTranscription,5000);
-            }else {
+            if (status === "IN_PROGRESS") {
+                setTimeout(getTranscription, 5000);
+            } else {
                 setIsFetching(false);
-
                 setAwsTranscriptionItems(
-                    clearTranscriptionItems(transcription.results.items) // removes punctuation(, . ?)
+                    clearTranscriptionItems(transcription.results.items)
                 );
             }
         });
     }
 
-    if(isFetching){
-        return(
-            <div className="bg-white h-screen fixed inset-0 flex justify-center items-center z-[1000]">
-                <Loader color="black" size="xl" type="bars" />
+    if (isFetching) {
+        return (
+            <div className="fixed inset-0 flex flex-col justify-center items-center z-[1000] gap-4"
+                style={{ background: 'linear-gradient(135deg,#dde4ff 0%,#edfff6 45%,#f8f0ff 100%)' }}>
+                <div className="w-8 h-8 rounded-lg bg-[#1e1b4b] flex items-center justify-center">
+                    <Image src="/logo.png" alt="PhrasePop logo" width={18} height={18} className="invert" />
+                </div>
+                <Loader color="#4f46e5" size="md" type="bars" />
+                <p className="text-sm text-gray-500 font-medium">Transcribing your video...</p>
             </div>
-        )
+        );
     }
 
-    return(
+    return (
+        <div className="max-w-7xl mx-auto w-full px-6 md:px-10 pt-24 pb-16">
 
-        <>
-            <div className="container my-28 px-6 md:px-16 lg:px-16 sm:px-6">
-                <div className="grid lg:grid-cols-2 gap-6">
-                    {/* Left Column */}
-                    <div className="space-y-6">
-                        <div>
-                            <h2 className="text-2xl font-semibold">Caption Editor</h2>
-                        </div>
-
-                        <div className="border rounded-lg max-h-[600px] overflow-y-auto md:max-h-[858px] sm:max-h-[600px]">
-                            <div className="grid grid-cols-[1fr_1fr_2fr] gap-4 p-4 sticky top-0 bg-white font-medium min-w-0">
-                                <div>Start Time</div>
-                                <div>End Time</div>
-                                <div>Content</div>
-                            </div>
-
-                            <div>
-                                <TranscriptionEditor
-                                    awsTranscriptionItems={awsTranscriptionItems}
-                                    setAwsTranscriptionItems={setAwsTranscriptionItems}
-                                />
-                            </div>
-                        </div>
-                    </div>
-
-                    <ResultVideo
-                        filename={filename}
-                        transcriptionItems={awsTranscriptionItems}
-                    />
-               </div>
+            {/* Page header */}
+            <div className="flex items-center gap-3 mb-8">
+                <h1 className="text-2xl font-semibold text-[#1a1a2e]">Caption editor</h1>
+                <span className="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-600
+                                 bg-indigo-50/80 border border-indigo-200/60 rounded-full px-3 py-1">
+                    <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                        <path d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
+                    </svg>
+                    {filename}
+                </span>
             </div>
 
-        </>
+            {/* ResultVideo handles the dynamic layout */}
+            <ResultVideo
+                filename={filename}
+                transcriptionItems={awsTranscriptionItems}
+            />
 
-    )
+            {/* Caption editor table — always full width below */}
+            <div className="mt-8 rounded-2xl overflow-hidden"
+                style={{ background: 'rgba(255,255,255,0.42)', backdropFilter: 'blur(14px)', border: '1px solid rgba(255,255,255,0.65)' }}>
+
+                {/* Table header */}
+                <div className="grid grid-cols-[1fr_1fr_2fr] gap-4 px-5 py-3 font-medium text-sm text-gray-500 sticky top-0"
+                    style={{ background: 'rgba(255,255,255,0.7)', borderBottom: '0.5px solid rgba(0,0,0,0.08)' }}>
+                    <div>Start time</div>
+                    <div>End time</div>
+                    <div>Content</div>
+                </div>
+
+                <div className="max-h-72 overflow-y-auto">
+                    <TranscriptionEditor
+                        awsTranscriptionItems={awsTranscriptionItems}
+                        setAwsTranscriptionItems={setAwsTranscriptionItems}
+                    />
+                </div>
+            </div>
+        </div>
+    );
 }

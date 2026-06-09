@@ -1,47 +1,91 @@
-'use client'
-import {ColorInput, Select} from "@mantine/core";
+'use client';
+import { ColorInput, Select } from "@mantine/core";
+import { Progress } from "@mantine/core";
 import React from "react";
 
-export function CaptionCustomizer(
-    {primaryColor,setPrimaryColor,fontSize,setFontSize,previewBgColor,setPreviewBgColor,transcode,outlineColor,setOutlineColor}
-){
-
+export function CaptionCustomizer({
+    primaryColor, setPrimaryColor,
+    fontSize, setFontSize,
+    previewBgColor, setPreviewBgColor,
+    transcode,
+    outlineColor, setOutlineColor,
+    loaded,
+    progress,
+    landscape = false,
+}) {
     return (
-        <>
-            <div className="space-y-6 border p-4 rounded-lg ">
-                <h3 className="text-xl font-semibold">Caption Customization</h3>
-                <div className="grid sm:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                        <ColorInput label="Primary Color" value={primaryColor} onChange={setPrimaryColor}/>
-                    </div>
+        <div className="flex flex-col gap-5">
+            <p className="text-xs font-semibold uppercase tracking-widest text-gray-400">
+                Caption customization
+            </p>
 
-                    <div className="space-y-2">
-                        <ColorInput label="Outline Color" value={outlineColor} onChange={setOutlineColor}/>
-                    </div>
-
-                    <div className="space-y-2">
-                        <ColorInput label="Background Color" value={previewBgColor} onChange={setPreviewBgColor}/>
-                    </div>
-
-                    <div className="space-y-2">
-                        <Select
-                            label="Font size"
-                            placeholder="Pick value"
-                            value={fontSize}
-                            onChange={setFontSize}
-                            data={['16pt', '18pt', '24pt', '32pt']}
-                        />
-                    </div>
-
+            <div className={`grid gap-5 ${landscape ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-2'}`}>
+                <div>
+                    <ColorInput
+                        label="Primary color"
+                        value={primaryColor}
+                        onChange={setPrimaryColor}
+                        styles={{ label: { fontSize: '12px', color: '#6b7280', marginBottom: '4px' } }}
+                    />
                 </div>
-
-                <button
-                    className="w-full rounded-lg bg-black text-white h-12 text-center"
-                    onClick={transcode}
-                >
-                    Apply Captions
-                </button>
+                <div>
+                    <ColorInput
+                        label="Outline color"
+                        value={outlineColor}
+                        onChange={setOutlineColor}
+                        styles={{ label: { fontSize: '12px', color: '#6b7280', marginBottom: '4px' } }}
+                    />
+                </div>
+                <div>
+                    <ColorInput
+                        label="Preview background"
+                        value={previewBgColor}
+                        onChange={setPreviewBgColor}
+                        styles={{ label: { fontSize: '12px', color: '#6b7280', marginBottom: '4px' } }}
+                    />
+                </div>
+                <div>
+                    <Select
+                        label="Font size"
+                        value={fontSize}
+                        onChange={setFontSize}
+                        data={['16pt', '18pt', '24pt', '32pt']}
+                        styles={{ label: { fontSize: '12px', color: '#6b7280', marginBottom: '4px' } }}
+                    />
+                </div>
             </div>
-        </>
-    )
+
+            {/* Progress bar — only visible while processing */}
+            {progress < 1 && (
+                <div>
+                    <div className="flex justify-between items-center mb-1.5">
+                        <span className="text-xs text-gray-500">Applying captions...</span>
+                        <span className="text-xs font-medium text-indigo-600">{Math.floor(progress * 100)}%</span>
+                    </div>
+                    <Progress
+                        color="#4f46e5"
+                        value={Math.floor(progress * 100)}
+                        radius="xl"
+                        size="sm"
+                        striped
+                        animated
+                    />
+                </div>
+            )}
+
+            <button
+                onClick={transcode}
+                disabled={!loaded}
+                className="w-full rounded-xl py-3 text-sm font-medium transition-all duration-200
+                           disabled:opacity-50 disabled:cursor-not-allowed
+                           hover:scale-[1.01] active:scale-[0.99]"
+                style={{
+                    background: loaded ? '#4f46e5' : '#9ca3af',
+                    color: '#fff',
+                }}
+            >
+                {loaded ? 'Apply captions' : 'Loading FFmpeg...'}
+            </button>
+        </div>
+    );
 }
