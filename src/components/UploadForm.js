@@ -66,8 +66,9 @@ export default function UploadForm() {
             const trimmedFile = await trimVideo(file);
             setStatusText('Uploading...');
             const res = await axios.postForm('/api/upload', { file: trimmedFile });
+            console.log('Upload response:', res.data);
             const newName = res.data.newName;
-            router.push('/' + newName);
+            router.push('/uploads/' + newName);
         } catch (err) {
             console.error('Error processing video:', err);
             setIsError(true);
@@ -83,21 +84,6 @@ export default function UploadForm() {
                     <Loader color="white" size="xl" type="bars" />
                 </div>
             )}
-
-            {/* Upload button */}
-            {/* <div className="flex flex-col items-center mb-4">
-                <label className="bg-[#4f46e5] text-white py-3.5 px-8 rounded-xl text-base font-medium inline-flex gap-2 cursor-pointer transition duration-200 hover:scale-105 hover:bg-[#4338ca]">
-                    <UploadIcon />
-                    <span>Upload Video</span>
-                    <input
-                        type="file"
-                        onChange={handleFileChange}
-                        accept="video/mp4"
-                        className="hidden"
-                    />
-                </label>
-                {isError && <p className="text-xs text-red-500 mt-2">Max size: 10MB</p>}
-            </div> */}
 
             {/* Dropzone — desktop only */}
             <div className="md:block">

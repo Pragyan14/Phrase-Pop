@@ -17,6 +17,22 @@ function toJobName(filename) {
     return filename.replace(/\./g, '-');
 }
 
+async function videoExists(filename) {
+    const s3client = getS3Client();
+    try {
+        await s3client.send(new GetObjectCommand({
+            Bucket: process.env.AWS_BUCKET_NAME,
+            Key: filename
+        }));
+        return true;
+    } catch (e) {
+        if (e?.name === 'NoSuchKey' || e?.Code === 'NoSuchKey') {
+            return false;
+        }
+        throw e;
+    }
+}
+
 function getS3Client() {
     return new S3Client({
         region: 'ap-south-1',
@@ -76,7 +92,13 @@ async function getTranscriptionFile(filename) {
         if (transcriptionJobResponse) {
             return JSON.parse(await streamToString(transcriptionJobResponse.Body));
         }
-    } catch (e) { }
+    } catch (e) {
+        // NoSuchKey here just means transcription not ready yet — not an error
+        if (e?.name === 'NoSuchKey' || e?.Code === 'NoSuchKey') {
+            return null;
+        }
+        throw e; // re-throw unexpected errors
+    }
     return null;
 }
 
@@ -131,27 +153,44 @@ export async function GET(req) {
     const searchParams = new URLSearchParams(url.searchParams);
     const filename = searchParams.get('filename');
 
-    // Find ready transcription
-    const transcription = await getTranscriptionFile(filename);
-    if (transcription) {
-        waitUntil(scheduleCleanup(filename));
-        return Response.json({
-            status: "COMPLETED",
-            transcription
-        });
+    if (!filename) {
+        return Response.json({ error: 'No filename provided' }, { status: 400 });
     }
 
-    // Check if already transcribing
-    const existingJob = await getJob(filename);
-    if (existingJob) {
-        return Response.json({
-            status: existingJob.TranscriptionJob.TranscriptionJobStatus,
-        });
-    }
+    try {
+        // Check transcription file first
+        const transcription = await getTranscriptionFile(filename);
+        if (transcription) {
+            try {
+                waitUntil(scheduleCleanup(filename));
+            } catch (e) {
+                setTimeout(() => scheduleCleanup(filename), 0);
+            }
+            return Response.json({ status: "COMPLETED", transcription });
+        }
 
-    // Create new transcription job
-    const newJob = await createTranscriptionJob(filename);
-    return Response.json({
-        status: newJob.TranscriptionJob.TranscriptionJobStatus,
-    });
+        // Check if transcribe job already running
+        const existingJob = await getJob(filename);
+        if (existingJob) {
+            return Response.json({
+                status: existingJob.TranscriptionJob.TranscriptionJobStatus,
+            });
+        }
+
+        // No transcription, no job — check video actually exists before creating job
+        const exists = await videoExists(filename);
+        if (!exists) {
+            return Response.json({ error: 'Not found' }, { status: 404 });
+        }
+
+        // Video exists, start transcription
+        const newJob = await createTranscriptionJob(filename);
+        return Response.json({
+            status: newJob.TranscriptionJob.TranscriptionJobStatus,
+        });
+
+    } catch (e) {
+        console.error('Transcribe route error:', e);
+        return Response.json({ error: 'Something went wrong' }, { status: 500 });
+    }
 }

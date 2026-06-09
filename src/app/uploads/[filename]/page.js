@@ -13,6 +13,7 @@ export default function FilePage({ params }) {
     const [isFetching, setIsFetching] = useState(true);
     const [awsTranscriptionItems, setAwsTranscriptionItems] = useState([]);
     const [isMobile, setIsMobile] = useState(false);
+    const [isDeleted, setIsDeleted] = useState(false);
 
     useEffect(() => {
         getTranscription();
@@ -23,35 +24,44 @@ export default function FilePage({ params }) {
     }, []);
 
     function getTranscription() {
-    axios.get('/api/transcribe?filename=' + filename)
-        .then(response => {
-            const status = response.data?.status;
-            const transcription = response.data?.transcription;
-            if (status === "IN_PROGRESS") {
-                setTimeout(getTranscription, 5000);
-            } else {
+        axios.get('/api/transcribe?filename=' + filename)
+            .then(response => {
+                const status = response.data?.status;
+                const transcription = response.data?.transcription;
+                if (status === "IN_PROGRESS") {
+                    setTimeout(getTranscription, 5000);
+                } else {
+                    setIsFetching(false);
+                    setAwsTranscriptionItems(
+                        clearTranscriptionItems(transcription.results.items)
+                    );
+                }
+            })
+            .catch(err => {
                 setIsFetching(false);
-                setAwsTranscriptionItems(
-                    clearTranscriptionItems(transcription.results.items)
-                );
-            }
-        })
-        .catch(err => {
-            if (err.response?.status === 404) {
-                setIsDeleted(true);
-                setIsFetching(false);
-            }
-        });
-}
+                if (err.response?.status === 404) {
+                    setIsDeleted(true);
+                }
+            });
+    }
+
+    if (isDeleted) {
+        return (
+            <div className="min-h-screen flex flex-col justify-center items-center gap-4 px-6 text-center">
+                <h1 className="text-8xl font-semibold text-indigo-200">404</h1>
+                <p className="text-gray-400 text-sm">This page doesn't exist.</p>
+                <a href="/"
+                    className="mt-2 bg-[#4f46e5] text-white text-sm font-medium px-6 py-2.5 rounded-xl hover:bg-[#4338ca] transition-colors">
+                    Go home
+                </a>
+            </div>
+        );
+    }
     if (isFetching) {
         return (
             <div className="fixed inset-0 flex flex-col justify-center items-center z-[1000] gap-4"
                 style={{ background: 'linear-gradient(135deg,#dde4ff 0%,#edfff6 45%,#f8f0ff 100%)' }}>
-                <div className="w-8 h-8 rounded-lg bg-[#1e1b4b] flex items-center justify-center">
-                    <Image src="/logo.png" alt="PhrasePop logo" width={18} height={18} className="invert" />
-                </div>
                 <Loader color="#4f46e5" size="md" type="bars" />
-                <p className="text-sm text-gray-500 font-medium">Transcribing your video...</p>
             </div>
         );
     }
