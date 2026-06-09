@@ -15,7 +15,7 @@ export default function Home() {
     return (
         <div>
             {/* ── Hero ── */}
-            <section className="min-h-screen flex items-center">
+            <section className="min-h-screen py-32 flex items-center">
                 <div className="max-w-7xl mx-auto w-full px-6 md:px-10 flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
 
                     {/* Left — copy */}

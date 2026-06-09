@@ -1,6 +1,6 @@
 "use client"
 
-import {CloudIcon as CloudUp} from "lucide-react"
+import { CloudUpload} from "lucide-react"
 import {useCallback, useState} from "react"
 import {useDropzone} from "react-dropzone"
 
@@ -55,7 +55,7 @@ export function Dropzone({
             <input {...getInputProps()} />
 
             <div className="flex flex-col items-center gap-3">
-                <CloudUp className={`h-10 w-10 transition-colors ${isDragActive ? "text-indigo-400" : "text-gray-300"}`} />
+                <CloudUpload className={`h-10 w-10 transition-colors ${isDragActive ? "text-grey-300" : "text-indigo-400"}`} />
 
                 <p className="text-base font-semibold text-gray-700">
                     Drag and drop your video here
