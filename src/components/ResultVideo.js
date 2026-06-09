@@ -4,6 +4,7 @@ import { fetchFile, toBlobURL } from '@ffmpeg/util';
 import { transcriptionItemToSrt } from "@/lib/awsTranscriptionHelper";
 import roboto from "./../fonts/Roboto-Regular.ttf";
 import robotoBold from "./../fonts/Roboto-Bold.ttf";
+import notoSans from "./../fonts/NotoSans-Regular.ttf"
 import { CaptionCustomizer } from "@/components/CaptionCustomizer";
 
 export default function ResultVideo({ filename, transcriptionItems }) {
@@ -49,6 +50,7 @@ export default function ResultVideo({ filename, transcriptionItems }) {
         });
         await ffmpeg.writeFile('/tmp/roboto.ttf', await fetchFile(roboto));
         await ffmpeg.writeFile('/tmp/roboto-bold.ttf', await fetchFile(robotoBold));
+        await ffmpeg.writeFile('/tmp/noto.ttf', await fetchFile(notoSans));
         setLoaded(true);
     };
 
@@ -73,7 +75,7 @@ export default function ResultVideo({ filename, transcriptionItems }) {
         await ffmpeg.exec([
             '-i', filename,
             '-preset', 'ultrafast',
-            '-vf', `subtitles=subs.srt:fontsdir=/tmp:force_style='Fontname=Roboto,FontSize=${(fontSize.slice(0, 2)) - 8},MarginV=12,PrimaryColour=${toFfmpegColor(primaryColor)},OutlineColour=${toFfmpegColor(outlineColor)}'`,
+            '-vf', `subtitles=subs.srt:fontsdir=/tmp:force_style='Fontname=Noto Sans,FontSize=${(fontSize.slice(0, 2)) - 8},MarginV=12,PrimaryColour=${toFfmpegColor(primaryColor)},OutlineColour=${toFfmpegColor(outlineColor)}'`,
             'output.mp4'
         ]);
         const data = await ffmpeg.readFile('output.mp4');

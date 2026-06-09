@@ -7,17 +7,24 @@ import TranscriptionEditor from "@/components/TranscriptionEditor";
 import { Loader } from "@mantine/core";
 import Image from "next/image";
 
+
 export default function FilePage({ params }) {
     const { filename } = React.use(params);
     const [isFetching, setIsFetching] = useState(true);
     const [awsTranscriptionItems, setAwsTranscriptionItems] = useState([]);
+    const [isMobile, setIsMobile] = useState(false);
 
     useEffect(() => {
         getTranscription();
     }, [filename]);
 
+    useEffect(() => {
+        setIsMobile(/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent));
+    }, []);
+
     function getTranscription() {
-        axios.get('/api/transcribe?filename=' + filename).then(response => {
+    axios.get('/api/transcribe?filename=' + filename)
+        .then(response => {
             const status = response.data?.status;
             const transcription = response.data?.transcription;
             if (status === "IN_PROGRESS") {
@@ -28,9 +35,14 @@ export default function FilePage({ params }) {
                     clearTranscriptionItems(transcription.results.items)
                 );
             }
+        })
+        .catch(err => {
+            if (err.response?.status === 404) {
+                setIsDeleted(true);
+                setIsFetching(false);
+            }
         });
-    }
-
+}
     if (isFetching) {
         return (
             <div className="fixed inset-0 flex flex-col justify-center items-center z-[1000] gap-4"
@@ -60,7 +72,7 @@ export default function FilePage({ params }) {
             </div>
 
             {/* Warning */}
-            <div className="flex items-start gap-2.5 rounded-xl px-4 py-3 mb-8"
+            <div className="flex items-start gap-2.5 rounded-xl px-4 py-3 mb-4"
                 style={{ background: 'rgba(251,191,36,0.12)', border: '0.5px solid rgba(251,191,36,0.4)' }}>
                 <svg className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                     <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
@@ -70,6 +82,18 @@ export default function FilePage({ params }) {
                     Captions are only available for that duration.
                 </p>
             </div>
+
+            {isMobile && (
+                <div className="flex items-start gap-2.5 rounded-xl px-4 py-3 mb-4"
+                    style={{ background: 'rgba(239,68,68,0.08)', border: '0.5px solid rgba(239,68,68,0.3)' }}>
+                    <svg className="w-4 h-4 text-red-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                        <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                    </svg>
+                    <p className="text-sm text-red-500 leading-relaxed">
+                        You're on a mobile device — <span className="font-semibold">Apply captions</span> may be slow or crash due to browser memory limits. For best results, use a <span className="font-semibold">desktop browser</span>.
+                    </p>
+                </div>
+            )}
 
             {/* ResultVideo handles the dynamic layout */}
             <ResultVideo

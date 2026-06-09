@@ -3,8 +3,15 @@
 import UploadForm from "@/components/UploadForm";
 import { FeaturesSection } from "@/components/FeaturesSection";
 import { Languages, Zap, ShieldCheck } from 'lucide-react';
+import { useEffect, useState } from 'react';
 
 export default function Home() {
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        setIsMobile(/Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent));
+    }, []);
+
     return (
         <div>
             {/* ── Hero ── */}
@@ -52,8 +59,8 @@ export default function Home() {
                                 <span className="text-xs text-gray-400 bg-gray-100/70 px-2.5 py-1 rounded-full">MP4 · Max 10MB</span>
                             </div>
 
-                            {/* Warning */}
-                            <div className="flex items-start gap-2 rounded-xl px-3 py-2.5 mb-4"
+                            {/* Hobby project warning */}
+                            <div className="flex items-start gap-2 rounded-xl px-3 py-2.5 mb-3"
                                 style={{ background: 'rgba(251,191,36,0.12)', border: '0.5px solid rgba(251,191,36,0.4)' }}>
                                 <svg className="w-3.5 h-3.5 text-amber-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
                                     <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
@@ -62,6 +69,19 @@ export default function Home() {
                                     This is a hobby project — videos are trimmed to 15 seconds and automatically deleted after 30 minutes.
                                 </p>
                             </div>
+
+                            {/* Mobile warning */}
+                            {isMobile && (
+                                <div className="flex items-start gap-2 rounded-xl px-3 py-2.5 mb-3"
+                                    style={{ background: 'rgba(239,68,68,0.08)', border: '0.5px solid rgba(239,68,68,0.3)' }}>
+                                    <svg className="w-3.5 h-3.5 text-red-400 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                                        <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                                    </svg>
+                                    <p className="text-xs text-red-500 leading-relaxed">
+                                        Mobile detected — for best results, use a <span className="font-semibold">desktop browser</span>. Video processing may be slow or fail on mobile.
+                                    </p>
+                                </div>
+                            )}
 
                             <UploadForm />
                         </div>
