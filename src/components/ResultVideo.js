@@ -5,7 +5,6 @@ import { transcriptionItemToSrt } from "@/lib/awsTranscriptionHelper";
 import roboto from "./../fonts/Roboto-Regular.ttf";
 import robotoBold from "./../fonts/Roboto-Bold.ttf";
 import { CaptionCustomizer } from "@/components/CaptionCustomizer";
-import { CaptionPreview } from "@/components/CaptionPreview";
 
 export default function ResultVideo({ filename, transcriptionItems }) {
     const videoUrl = `https://phrase-pop.s3.amazonaws.com/${filename}`;

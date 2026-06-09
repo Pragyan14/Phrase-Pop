@@ -48,15 +48,27 @@ export default function FilePage({ params }) {
         <div className="max-w-7xl mx-auto w-full px-6 md:px-10 pt-24 pb-16">
 
             {/* Page header */}
-            <div className="flex items-center gap-3 mb-8">
+            <div className="flex items-center gap-3 mb-5">
                 <h1 className="text-2xl font-semibold text-[#1a1a2e]">Caption editor</h1>
                 <span className="inline-flex items-center gap-1.5 text-xs font-medium text-indigo-600
-                                 bg-indigo-50/80 border border-indigo-200/60 rounded-full px-3 py-1">
+                     bg-indigo-50/80 border border-indigo-200/60 rounded-full px-3 py-1">
                     <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
                         <path d="M15 10l4.553-2.069A1 1 0 0121 8.845v6.31a1 1 0 01-1.447.894L15 14M3 8a2 2 0 012-2h10a2 2 0 012 2v8a2 2 0 01-2 2H5a2 2 0 01-2-2V8z" />
                     </svg>
                     {filename}
                 </span>
+            </div>
+
+            {/* Warning */}
+            <div className="flex items-start gap-2.5 rounded-xl px-4 py-3 mb-8"
+                style={{ background: 'rgba(251,191,36,0.12)', border: '0.5px solid rgba(251,191,36,0.4)' }}>
+                <svg className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
+                    <path fillRule="evenodd" d="M8.485 2.495c.673-1.167 2.357-1.167 3.03 0l6.28 10.875c.673 1.167-.17 2.625-1.516 2.625H3.72c-1.347 0-2.189-1.458-1.515-2.625L8.485 2.495zM10 5a.75.75 0 01.75.75v3.5a.75.75 0 01-1.5 0v-3.5A.75.75 0 0110 5zm0 9a1 1 0 100-2 1 1 0 000 2z" clipRule="evenodd" />
+                </svg>
+                <p className="text-sm text-amber-700 leading-relaxed">
+                    This is a hobby project — your video was trimmed to the first <span className="font-semibold">15 seconds</span> before processing.
+                    Captions are only available for that duration.
+                </p>
             </div>
 
             {/* ResultVideo handles the dynamic layout */}
